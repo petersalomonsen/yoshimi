@@ -25,7 +25,13 @@
 #ifndef FFT_WRAPPER_H
 #define FFT_WRAPPER_H
 
+#ifndef WASM
 #include <fftw3.h>
+#else
+#include <kiss_fftr.h>
+#define fftwf_malloc malloc
+#define fftwf_free free
+#endif
 
 typedef struct {
     float *s;
@@ -48,8 +54,13 @@ class FFTwrapper
         int half_fftsize;
         float *data1;
         float *data2;
+#ifndef WASM
         fftwf_plan planBasic;
         fftwf_plan planInv;
+#else
+        kiss_fftr_cfg cfgBasic;
+        kiss_fftr_cfg cfgInv;
+#endif
 };
 
 #endif

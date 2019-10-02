@@ -235,6 +235,7 @@ inline bool copyFile(string source, string destination)
 
 inline string saveGzipped(char *data, string filename, int compression)
 {
+#ifndef WASM
     char options[10];
     snprintf(options, 10, "wb%d", compression);
 
@@ -244,6 +245,7 @@ inline string saveGzipped(char *data, string filename, int compression)
         return "gzopen() == NULL";
     gzputs(gzfile, data);
     gzclose(gzfile);
+#endif
     return "";
 }
 
@@ -278,6 +280,7 @@ inline bool saveText(string text, string filename)
 
 inline char * loadGzipped(string _filename, string * report)
 {
+#ifndef WASM
     string filename = _filename;
     char *data = NULL;
     gzFile gzf  = gzopen(filename.c_str(), "rb");
@@ -322,6 +325,12 @@ inline char * loadGzipped(string _filename, string * report)
     gzclose(gzf);
     //*report = "it looks like we sucessfully loaded" + filename;
     return data;
+#else
+    // unzipped content passed in _filename
+    char *xmldata = new char[_filename.size() + 1];
+    strncpy(xmldata, _filename.c_str(), _filename.size());
+    return xmldata;
+#endif
 }
 
 

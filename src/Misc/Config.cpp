@@ -205,6 +205,7 @@ bool Config::Setup(int argc, char **argv)
     //clearPresetsDirlist();
     AntiDenormals(true);
 
+#ifndef WASM
     if (!loadConfig())
     {
         string message = "Could not load config. Using default values. Using defaults.";
@@ -212,6 +213,7 @@ bool Config::Setup(int argc, char **argv)
         Log("\n\n" + message + "\n");
         //return false;
     }
+#endif
 
     /* NOTE: we must not do any further init involving the SynthEngine here,
      * since this code is invoked from within the SynthEngine-ctor.
@@ -937,6 +939,7 @@ void Config::setRtprio(int prio)
 bool Config::startThread(pthread_t *pth, void *(*thread_fn)(void*), void *arg,
                          bool schedfifo, char priodec, string name)
 {
+#ifndef WASM
     pthread_attr_t attr;
     int chk;
     bool outcome = false;
@@ -1007,6 +1010,9 @@ bool Config::startThread(pthread_t *pth, void *(*thread_fn)(void*), void *arg,
         break;
     }
     return outcome;
+#else
+  return true;
+#endif
 }
 
 
@@ -1307,9 +1313,11 @@ static struct argp cmd_argp = { cmd_options, parse_cmds, prog_doc, 0, 0, 0, 0};
 
 void Config::loadCmdArgs(int argc, char **argv)
 {
+#ifndef WASM
     argp_parse(&cmd_argp, argc, argv, 0, 0, this);
     if (jackSessionUuid.size() && jackSessionFile.size())
         restoreJackSession = true;
+#endif
 }
 
 #ifdef GUI_FLTK

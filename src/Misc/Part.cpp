@@ -1338,6 +1338,7 @@ bool Part::saveXML(string filename, bool yoshiFormat)
 
 int Part::loadXMLinstrument(string filename)
 {
+#ifndef WASM
     bool hasYoshi = true;
     filename = setExtension(filename, EXTEN::yoshInst);
     if (!isRegularFile(filename))
@@ -1345,6 +1346,9 @@ int Part::loadXMLinstrument(string filename)
         hasYoshi = false;
         filename = setExtension(filename, EXTEN::zynInst);
     }
+#else
+    bool hasYoshi = false;
+#endif
 
     XMLwrapper *xml = new XMLwrapper(synth, hasYoshi);
     if (!xml)

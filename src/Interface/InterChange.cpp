@@ -731,6 +731,7 @@ void InterChange::indirectTransfers(CommandBlock *getData, bool noForward)
                     break;
                 case MAIN::control::openManualPDF: // display user guide
                 {
+#ifndef WASM
                     std::string manfile = synth->manualname();
                     unsigned int pos = manfile.rfind(".") + 1;
                     int wanted = std::stoi(manfile.substr(pos, 3));
@@ -760,6 +761,7 @@ void InterChange::indirectTransfers(CommandBlock *getData, bool noForward)
                         pclose(fp);
                     }
                     newMsg = true;
+#endif
                     break;
                 }
                 case MAIN::control::startInstance:

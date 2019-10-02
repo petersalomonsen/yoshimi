@@ -23,7 +23,11 @@
 #include "MusicIO/MusicClient.h"
 #include "Misc/SynthEngine.h"
 #include "MusicIO/AlsaEngine.h"
+#ifndef WASM
 #include "MusicIO/JackEngine.h"
+#else
+#include "MusicIO/MusicIO.h"
+#endif
 #include <iostream>
 #include <stdlib.h>
 #include <set>
@@ -115,9 +119,11 @@ MusicClient::MusicClient(SynthEngine *_synth, audio_drivers _audioDrv, midi_driv
 
     switch(audioDrv)
     {
+#ifndef WASM
         case jack_audio:
             audioIO = new JackEngine(synth);
             break;
+#endif
 #if defined(HAVE_ALSA)
         case alsa_audio:
             audioIO = new AlsaEngine(synth);
@@ -130,10 +136,12 @@ MusicClient::MusicClient(SynthEngine *_synth, audio_drivers _audioDrv, midi_driv
 
     switch(midiDrv)
     {
+#ifndef WASM
         case jack_midi:
             if (audioDrv != jack_audio)
                 midiIO = new JackEngine(synth);
             break;
+#endif
 #if defined(HAVE_ALSA)
         case alsa_midi:
             midiIO = new AlsaEngine(synth);

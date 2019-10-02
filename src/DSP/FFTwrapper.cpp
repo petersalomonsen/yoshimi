@@ -35,15 +35,25 @@ FFTwrapper::FFTwrapper(int fftsize_) :
 {
     data1 = (float*)fftwf_malloc(fftsize * sizeof(float));
     data2 = (float*)fftwf_malloc(fftsize * sizeof(float));
+#ifndef WASM
     planBasic = fftwf_plan_r2r_1d(fftsize, data1, data1, FFTW_R2HC, FFTW_ESTIMATE);
     planInv = fftwf_plan_r2r_1d(fftsize, data2, data2, FFTW_HC2R, FFTW_ESTIMATE);
+#else
+  cfgBasic = kiss_fftr_alloc(fftsize, 0, NULL, NULL);
+  cfgInv    = kiss_fftr_alloc(fftsize, 1, NULL, NULL);
+#endif
 }
 
 
 FFTwrapper::~FFTwrapper()
 {
+#ifndef WASM
     fftwf_destroy_plan(planBasic);
     fftwf_destroy_plan(planInv);
+#else
+    free(cfgBasic);
+    free(cfgInv);
+#endif
     fftwf_free(data1);
     fftwf_free(data2);
 }
@@ -71,22 +81,40 @@ void FFTwrapper::deleteFFTFREQS(FFTFREQS *f)
 // Fast Fourier Transform
 void FFTwrapper::smps2freqs(float *smps, FFTFREQS *freqs)
 {
+#ifndef WASM
     memcpy(data1, smps, fftsize * sizeof(float));
     fftwf_execute(planBasic);
     memcpy(freqs->c, data1, half_fftsize * sizeof(float));
     for (int i = 1; i < half_fftsize; ++i)
         freqs->s[i] = data1[fftsize - i];
     data2[half_fftsize] = 0.0f;
+#else
+  kiss_fftr(cfgBasic, smps, (kiss_fft_cpx*)data1);
+  int n = 0;
+  for (int i = 0; i < half_fftsize; i++) {
+    freqs->c[i] = data1[n++];
+    freqs->s[i] = data1[n++];
+  }
+#endif
 }
 
 
 // Inverse Fast Fourier Transform
 void FFTwrapper::freqs2smps(FFTFREQS *freqs, float *smps)
 {
+#ifndef WASM
     memcpy(data2, freqs->c, half_fftsize * sizeof(float));
     data2[half_fftsize] = 0.0;
     for (int i = 1; i < half_fftsize; ++i)
         data2[fftsize - i] = freqs->s[i];
     fftwf_execute(planInv);
     memcpy(smps, data2, fftsize * sizeof(float));
+#else
+  int n = 0;
+  for (int i = 0; i < half_fftsize; i++) {
+    data2[n++] = freqs->c[i];
+    data2[n++] = freqs->s[i];
+  }
+  kiss_fftri(cfgInv, (kiss_fft_cpx*)data2, (kiss_fft_scalar*)smps);
+#endif
 }

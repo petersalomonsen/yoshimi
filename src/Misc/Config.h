@@ -264,7 +264,9 @@ public:
         msg->data = _data;
         msg->type = _type;
         msg->index = _index;
+#ifndef WASM
         Fl::awake((void *)msg);
+#endif
     }
     static void processGuiMessages();
 };
