@@ -1,7 +1,9 @@
-import { TrackerPattern, pitchbend, controlchange } from "./trackerpattern.js";
+import { TrackerPattern, pitchbend, controlchange, createNoteFunctions } from "./trackerpattern.js";
 import { waitForFixedStartTime, setBPM } from './pattern.js';
 
 const output = { sendMessage: (msg) => yoshimi.onMidi(msg) };
+
+createNoteFunctions();
 
 window.loadparams = async function() {
     let filename = "upbeat.xmz";
