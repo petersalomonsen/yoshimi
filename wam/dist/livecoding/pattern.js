@@ -8,18 +8,21 @@ const noteStringToNoteNumberMap =
 
 export let startTime = Date.now();
 export let bpm = 110;
-export const currentBeat = async () =>
-    ((Date.now() -
-        global.startTime)/
-        (60*1000)
-) * global.bpm; 
+export const setBPM = (tempo) => bpm = tempo;
 
-export const beatToTime = async (beatNo) => ((beatNo / global.bpm) * 60 * 1000) + global.startTime;
+export const currentBeat = () =>
+    ((Date.now() -
+        startTime)/
+        (60*1000)
+) * bpm; 
+
+console.log('hello from pattern');
+export const beatToTime = async (beatNo) => ((beatNo / bpm) * 60 * 1000) + startTime;
 
 export async function waitForBeat(beatNo) {
-        let timeout = Math.floor((((beatNo) / global.bpm) * (60*1000)) - 
+        let timeout = Math.floor((((beatNo) / bpm) * (60*1000)) - 
                 (Date.now() -
-                global.startTime)); 
+                startTime)); 
         
         if(timeout<0) {
             timeout = 0;
@@ -39,32 +42,26 @@ export async function waitForBeat(beatNo) {
  * @param {*} delay (default is 100 ms)
  */
 export async function delayPlay(delay) {
-    global.startTime = new Date().getTime() + (delay ? delay : 100);
-    global.delayPlay = async () => console.log('delay play only has effect once');
+    startTime = new Date().getTime() + (delay ? delay : 100);
+    delayPlay = async () => console.log('delay play only has effect once');
     await waitForBeat(0);
 }
 
 export async function waitForFixedStartTime(startTime) {
     if(!startTime) {
-        const startTimeArgIndex = process.argv.findIndex(arg => arg === '--starttime');
-        if(startTimeArgIndex > -1) {
-            startTime = parseInt(process.argv[startTimeArgIndex +1 ]);
-            console.log('Will start playin at ', new Date(startTime));
-        } else {
-            startTime = new Date().getTime() + 100;
-        }
+        startTime = new Date().getTime() + 100;
     }
-    global.startTime = startTime;
-    global.delayPlay = async () => console.log('delay play only has effect once');
+    startTime = startTime;
+    delayPlay = async () => console.log('delay play only has effect once');
     await waitForBeat(0);
 }
 
 export async function countdown(counter) {
-    let beat = Math.round(global.currentBeat());                              
+    let beat = Math.round(currentBeat());                              
     while(counter>0) {
         console.log(counter--);
         beat++;
-        await global.waitForBeat(beat);     
+        await waitForBeat(beat);     
     }
 }
 
@@ -89,10 +86,10 @@ export class Pattern {
 
     waitForBeat(beatNo) {   
         
-        let timeout = Math.floor((((beatNo + this.offset) / global.bpm) * (60*1000)) - 
+        let timeout = Math.floor((((beatNo + this.offset) / bpm) * (60*1000)) - 
                 (Date.now() -
-                global.startTime)); 
-        
+                startTime)); 
+
         if(timeout<0) {
             timeout = 0;
         }
@@ -112,7 +109,7 @@ export class Pattern {
     }
 
     async waitDuration(duration) {
-        const timeout = (duration*60*1000) / global.bpm; 
+        const timeout = (duration*60*1000) / bpm; 
         
         return new Promise((resolve, reject) =>
             setTimeout(() => {

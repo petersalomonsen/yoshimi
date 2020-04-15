@@ -121,6 +121,11 @@
       midikeys.keyDown = (note, name) => yoshimi.onMidi([0x90, note, 100]);
       midikeys.keyUp   = (note, name) => yoshimi.onMidi([0x80, note, 100]);
       initMidi();
+
+      const scriptelm = document.createElement('script');
+      scriptelm.type = "module";
+      scriptelm.src = "livecoding/song.js";
+      document.documentElement.appendChild(scriptelm);
     });
   }
 </script>
@@ -138,6 +143,11 @@
   </div>
   <div class="credit"><a href="https://github.com/jariseon/yoshimi">web port</a> by <a href="mailto:jari@webaudiomodules.org">jari kleimola</a> 2019</div>
 
+  <br />
+  <button onclick="playsong()">play song</button> by <a href="https://github.com/petersalomonsen/javascriptmusic/blob/master/songs/upbeat.js">peter salomonsen</a>
+  <br />
+  <br />
+  
   <style>
     * { cursor:default; }
     body { font-family:sans-serif; font-weight:100; user-select:none; -webkit-user-select:none; margin-left:20px; }
