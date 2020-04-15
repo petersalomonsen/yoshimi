@@ -1,5 +1,5 @@
-import { TrackerPattern, pitchbend, controlchange } from "./trackerpattern";
-import { waitForFixedStartTime, setBPM } from './pattern';
+import { TrackerPattern, pitchbend, controlchange } from "./trackerpattern.js";
+import { waitForFixedStartTime, setBPM } from './pattern.js';
 
 const output = { sendMessage: (msg) => yoshimi.onMidi(msg) };
 

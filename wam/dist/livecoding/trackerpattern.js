@@ -1,4 +1,4 @@
-import { Pattern, currentBeat } from './pattern'
+import { Pattern, currentBeat } from './pattern.js'
 
 // Note functions - can be called with and without parameter (also without parantheses)
 new Array(128).fill(null).map((v, ndx) => 
