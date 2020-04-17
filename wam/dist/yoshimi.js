@@ -18,8 +18,8 @@ WAM.YOSHIMI = class YOSHIMI extends WAMController
   // -- wasm and scripts need to be loaded first, and in order
   //
   static async importScripts (actx, prefix = "") {
-    YOSHIMI.wasm = await YOSHIMI.load("worklet/yoshimi.wasm", "bin");
-    YOSHIMI.js   = await YOSHIMI.load("worklet/yoshimi.js", "text");
+    YOSHIMI.wasm = await YOSHIMI.load(prefix + "worklet/yoshimi.wasm", "bin");
+    YOSHIMI.js   = await YOSHIMI.load(prefix + "worklet/yoshimi.js", "text");
     await actx.audioWorklet.addModule(prefix + "libs/wam-processor.js");
     await actx.audioWorklet.addModule(prefix + "worklet/yoshimi-awp.js");
   }
