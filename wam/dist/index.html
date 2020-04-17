@@ -96,7 +96,7 @@
 
       // -- create WAM
       // AWPF.origin = "http://127.0.0.1:44102/dist/";
-      AWPF.origin = "https://webaudiomodules.org/demos/jariseon/yoshimi/";
+      AWPF.origin = "";
       await WAM.YOSHIMI.importScripts(actx, AWPF.origin);
       yoshimi = new WAM.YOSHIMI(actx);
       yoshimi.connect(actx.destination);
