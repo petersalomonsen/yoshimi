@@ -114,8 +114,11 @@ void Yoshimi::set(string prop, double value)
 
 void Yoshimi::set(string prop, string value)
 {
-	if (prop == "patch") {
+	if (prop.substr(0,5) == "patch") {
 		int npart = 0;
+		if (prop.length() > 5) {
+			npart = stoi(prop.substr(5));
+		}
 		// _synth->resetAll(0);
 		// _synth->partonoffLock(npart, -1);
 		string s = value;
