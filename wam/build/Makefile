@@ -79,7 +79,8 @@ LIBS = mxml.bc kissfft.bc
 EXPORTS = "[\
   '_createModule','_wam_init','_wam_terminate','_wam_resize', \
   '_wam_onprocess', '_wam_onmidi', '_wam_onsysex', '_wam_onparam', \
-  '_wam_onmessageN', '_wam_onmessageS', '_wam_onmessageA', '_wam_onpatch' \
+  '_wam_onmessageN', '_wam_onmessageS', '_wam_onmessageA', '_wam_onpatch', \
+  '_yoshimi_getParametersXML' \
   ]"
 
 WARN = -Wall -Wno-unused-private-field -Wno-parentheses-equality -Wno-unused-variable

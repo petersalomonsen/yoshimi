@@ -3129,6 +3129,16 @@ bool SynthEngine::savePatchesXML(string filename)
     return result;
 }
 
+char * SynthEngine::getPatchesXML()
+{
+    Runtime.xmlType = TOPLEVEL::XML::Patch;
+    XMLwrapper *xml = new XMLwrapper(this, true);
+    add2XML(xml);
+    char *result = xml->getXMLdata();
+    delete xml;
+    return result;
+}
+
 
 bool SynthEngine::loadXML(string filename)
 {

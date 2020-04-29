@@ -83,6 +83,7 @@ class SynthEngine
         bool Init(unsigned int audiosrate, int audiobufsize);
 
         bool savePatchesXML(string filename);
+        char * getPatchesXML();
         void add2XML(XMLwrapper *xml);
         string manualname();
         void defaults(void);

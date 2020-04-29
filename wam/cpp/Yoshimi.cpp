@@ -8,7 +8,12 @@
 #include "Yoshimi.h"
 #include "Misc/SynthEngine.h"
 
-extern "C" { EMSCRIPTEN_KEEPALIVE void* createModule() { return new Yoshimi_WAM(); }}
+extern "C" {
+	EMSCRIPTEN_KEEPALIVE char * yoshimi_getParametersXML(Yoshimi* yoshimi) {
+		return yoshimi->getParametersXML();
+	}
+	EMSCRIPTEN_KEEPALIVE void* createModule() { return new Yoshimi_WAM(); }	
+}
 
 Yoshimi_WAM::Yoshimi_WAM () {}
 
@@ -65,6 +70,9 @@ void Yoshimi_WAM::onProcess(AudioBus* audio, void* data)
 	yoshimi->render(audio, data);
 }
 
+char * Yoshimi_WAM::getParametersXML() {
+	return yoshimi->getParametersXML();
+}
 // ==============================================================================================
 
 Yoshimi::Yoshimi(SynthEngine* engine)
@@ -128,6 +136,10 @@ void Yoshimi::set(string prop, string value)
 		string s = value;
 		firstSynth->loadXML(s);
 	}
+}
+
+char * Yoshimi::getParametersXML() {
+	return firstSynth->getPatchesXML();
 }
 
 void Yoshimi::onMidi(byte status, byte data1, byte data2)

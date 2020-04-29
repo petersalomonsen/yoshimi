@@ -23,6 +23,7 @@ public:
 	void set(string prop, string value);
 	void onMidi(byte status, byte data1, byte data2);
 	void render(AudioBus* audio, void* data);
+	char * getParametersXML();
 
 	// -- MusicIO
 	unsigned int getSamplerate(void) override { return _sampleRate; }
@@ -74,7 +75,7 @@ public:
 	void onMessage(char* verb, char* res, double data) override;
 	void onMessage(char* verb, char* res, char* data) override;
 	void onMessage(char* verb, char* res, void* data, uint32_t size) override;
-	
+	char * getParametersXML();
 private:
 	Yoshimi* yoshimi;
 };
