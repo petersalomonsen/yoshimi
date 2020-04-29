@@ -131,7 +131,7 @@ void Yoshimi::set(string prop, string value)
 		// _synth->partonoffLock(npart, -1);
 		string s = value;
 		_synth->part[npart]->loadXMLinstrument(s);
-		// _synth->partonoffLock(npart, 2 - _synth->getRuntime().enable_part_on_voice_load);
+		_synth->partonoffLock(npart, 1);
 	} else if (prop == "param") {
 		string s = value;
 		firstSynth->loadXML(s);
