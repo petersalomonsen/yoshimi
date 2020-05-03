@@ -1,0 +1,12 @@
+{
+    "name": "wasm-yoshimi",
+    "version": "0.0.1",
+    "author": {
+        "name": "Peter Salomonsen",
+        "url": "https://petersalomonsen.com"
+    },
+    "license": "GPL-2.0",
+    "repository": {
+        "url": "https://github.com/petersalomonsen/yoshimi"
+    }
+}
